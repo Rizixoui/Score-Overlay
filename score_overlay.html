@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overlay Score</title>
+    <style>
+        body {
+            margin: 0;
+            background: transparent;
+            font-family: Arial, sans-serif;
+        }
+        .score {
+            font-size: 100px;
+            color: white;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="score" id="scoreDisplay">0</div>
+    <script>
+        async function fetchScore() {
+            const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQAT2_MPxmyM6urKp1VRAOmC9VR6cZ5Fr9ZTPA-fVltvQ8wh8dZHab3KVvIouYxcaxJrJfI0IWfE3bP/pub?output=csv');
+            const data = await response.text();
+            const rows = data.split("\n");
+            const score = rows[1]?.split(",")[0];
+            document.getElementById('scoreDisplay').textContent = score.trim();
+        }
+        setInterval(fetchScore, 5000); // Mise à jour toutes les 5 secondes
+        fetchScore();
+    </script>
+</body>
+</html>
